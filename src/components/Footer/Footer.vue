@@ -45,7 +45,7 @@
           <FooterMainAuthor>@kosidocs</FooterMainAuthor>
           <FooterMainText>
             Porfolio works code is free to use, licensed under MIT. code ©
-            Kosiso Precious, 2020.
+            Kosiso Precious, 2021.
           </FooterMainText>
         </div>
         <SocialMedia>
