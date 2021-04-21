@@ -21,7 +21,7 @@
         </ProjectCard>
         <ProjectCard
           background="#8e6ecd"
-          href="https://github.com/KOSIDOCS/"
+          href="https://kosidev.com/"
           target="_blank"
         >
           <ProjectIcon>
