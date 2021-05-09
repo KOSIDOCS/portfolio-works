@@ -9,7 +9,7 @@
       aim is to showcase my capabilities and craft in the software
       industry</CardText
     >
-    <CardLink href="https://www.instagram.com/kosidocs/" target="_blank">
+    <CardLink href="https://www.instagram.com/kosidev/" target="_blank">
       <span>See on Instagram</span>
     </CardLink>
   </Wrapper>

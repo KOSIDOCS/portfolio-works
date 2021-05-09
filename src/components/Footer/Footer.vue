@@ -53,7 +53,7 @@
             v-tippy="{ distance: 20 }"
             content="Instagram"
             @click="
-              handleSocialButtonClick('https://www.instagram.com/kosidocs/')
+              handleSocialButtonClick('https://www.instagram.com/kosidev/')
             "
             class="icofont-instagram"
           />

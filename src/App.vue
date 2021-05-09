@@ -1,19 +1,52 @@
 <template>
-  <wrapper />
+  <StyleWrapper :theme="getTheme">
+    <Content>
+      <router-view />
+    </Content>
+  </StyleWrapper>
 </template>
 
 <script>
-import Wrapper from "./components/Wrapper.vue";
+import styled, { ThemeProvider } from "vue-styled-components";
+import { themeDefault } from "@/themes/themeDefault";
+import Content from "@/components/layout/Content";
 
 import "./assets/css/icofont.min.css";
 import "./assets/css/vue-code-highlight.css";
 
+const StyleWrapper = styled(ThemeProvider)`
+  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+`;
+
 export default {
-  components: { Wrapper },
+  name: "App",
+  components: {
+    StyleWrapper,
+    Content,
+  },
+  methods: {
+    handleMenuButtonClicked() {
+      this.sidebarOpen = !this.sidebarOpen;
+    },
+  },
+  mounted() {
+    this.env = process.env.NODE_ENV;
+  },
+  data() {
+    return {
+      getTheme: themeDefault,
+      sidebarOpen: false,
+      env: "",
+    };
+  },
 };
 </script>
 
-<style lang="scss">
+<style>
 body,
 html {
   margin: 0;

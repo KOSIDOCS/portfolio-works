@@ -9,55 +9,42 @@
         :background="c.background"
       >
         <FrameHeader class="frame-header">
-          <FrameNumber>#{{ c.id }}</FrameNumber>
+          <FrameNumber v-if="false">#{{ c.id }}</FrameNumber>
+          <DetailName :detailName="c.name" />
+          <FrameCollab
+            v-if="false"
+            v-tippy
+            :content="`collab with ${c.collab}`"
+            :src="c.image"
+          />
         </FrameHeader>
         <FrameComponent>
           <FrameCollab
+            @click="(event) => event.stopPropagation()"
             v-tippy
             :content="`collab with ${c.collab}`"
             :src="c.image"
           />
         </FrameComponent>
-        <LinkWrapper>
-          <ViewCodeText
-            class="viewcode-text"
-            :href="c.projectUrl"
-            target="_blank"
-          >
-            <span
-              class="material-icons-outlined"
-              :style="{ marginRight: '0.75rem' }"
-              >code</span
-            >
-            View Online
-          </ViewCodeText>
-          <ViewCodeText
-            class="viewcode-text"
-            :href="c.githubUrl"
-            target="_blank"
-          >
-            <span
-              class="material-icons-outlined"
-              :style="{ marginRight: '0.75rem' }"
-              >code</span
-            >
-            View Code
-          </ViewCodeText>
-          <ViewCodeText class="viewcode-text" :href="c.upwork" target="_blank">
-            <span
-              class="material-icons-outlined"
-              :style="{ marginRight: '0.75rem' }"
-              >code</span
-            >
-            View Upwork
-          </ViewCodeText>
-        </LinkWrapper>
 
-        <!-- <ViewCodeButton
+        <ViewCodeText class="viewcode-text">
+          <span
+            class="material-icons-outlined"
+            :style="{ marginRight: '0.75rem' }"
+            >code</span
+          >
+          View Details
+        </ViewCodeText>
+
+        <ViewCodeButton
           class="viewcode-button"
           :background="c.background"
           :isActive="isActive(c.name)"
         >
+          <!-- <router-link v-if="!detailOpen" :to="{ path: `/${c.name}` }">
+          View Code
+        </router-link> -->
+
           <ViewCodeSvg
             :isActive="isActive(c.name)"
             width="64"
@@ -66,9 +53,25 @@
           >
             <ViewCodeCircle :background="c.background" r="22" cx="32" cy="32" />
           </ViewCodeSvg>
-        </ViewCodeButton> -->
+        </ViewCodeButton>
       </Frame>
       <DetailFrame :activeItemName="activeItemName" :open="detailOpen">
+        <Detail
+          :open="detailOpen"
+          :interactionTitle="interactionTitle"
+          :interactionNumber="activeComponent ? activeComponent.id : 0"
+          :activeItemNumber="activeItemNumber"
+          :code="activeItemCode"
+          :activeComponent="activeComponent"
+          :collabImage="activeItemCollabImage"
+          :collabInsta="activeItemCollabInsta"
+          :githubUrl="githubUrl"
+          :projectUrl="projectUrl"
+          :upwork="upwork"
+          :skills="skills"
+          :details="details"
+          :technology="technology"
+        />
       </DetailFrame>
       <BackButton
         :background="activeItemColor"
@@ -85,8 +88,11 @@
 
 <script>
 import styled, { keyframes } from "vue-styled-components";
-import Topbar from "@/components/Topbar/Topbar";
-import AppFooter from "@/components/Footer/Footer";
+// import axios from "axios";
+import Detail from "./Detail";
+import DetailName from "./DetailName";
+import Topbar from "../Topbar/Topbar";
+import AppFooter from "../Footer/Footer";
 
 const wrapperProps = { detailOpen: Boolean };
 
@@ -182,11 +188,11 @@ const Frame = styled("div", frameProps)`
 `;
 
 const FrameHeader = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 150px;
+  height: 100px;
   opacity: 0;
   padding: 0 3rem;
   font-size: 0.875rem;
@@ -214,44 +220,43 @@ const FrameComponent = styled.div`
 
 const viewCodeProps = { isActive: Boolean, background: String };
 
-// const ViewCodeButton = styled("div", viewCodeProps)`
-//   position: absolute;
-//   z-index: 2;
-//   bottom: 0;
-//   left: 0;
-//   width: 100%;
-// `;
+const ViewCodeButton = styled("div", viewCodeProps)`
+  position: absolute;
+  z-index: 2;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+`;
 
-const ViewCodeText = styled.a`
+const ViewCodeText = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 60px;
+  height: 120px;
   color: rgba(255, 255, 255, 0.75);
   font-weight: 700;
   font-size: 0.875rem;
   opacity: 0;
   transition: opacity 0.35s;
-  appearance: none;
 
   & > span {
     font-size: 26px;
   }
 `;
 
-// const ViewCodeSvg = styled("svg", viewCodeProps)`
-//   position: absolute;
-//   z-index: 30;
-//   top: 50%;
-//   left: 50%;
-//   transform: translate(-50%, -50%)
-//     scale(${(props) => (props.isActive ? 200 : 0)});
-//   transition: transform ${(props) => (props.isActive ? "2s" : "1s")};
-// `;
+const ViewCodeSvg = styled("svg", viewCodeProps)`
+  position: absolute;
+  z-index: 30;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+    scale(${(props) => (props.isActive ? 200 : 0)});
+  transition: transform ${(props) => (props.isActive ? "2s" : "1s")};
+`;
 
-// const ViewCodeCircle = styled("circle", viewCodeProps)`
-//   fill: ${(props) => props.background || "black"};
-// `;
+const ViewCodeCircle = styled("circle", viewCodeProps)`
+  fill: ${(props) => props.background || "black"};
+`;
 
 const BackButton = styled("div", viewCodeProps)`
   position: fixed;
@@ -276,13 +281,6 @@ const BackButton = styled("div", viewCodeProps)`
   }
 `;
 
-const LinkWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: space-around;
-`;
-
 export default {
   props: {
     components: Array,
@@ -294,14 +292,15 @@ export default {
     AppFooter,
     Frame,
     DetailFrame,
+    Detail,
+    DetailName,
     FrameHeader,
     FrameComponent,
     FrameNumber,
     FrameCollab,
-    LinkWrapper,
-    // ViewCodeButton,
-    // ViewCodeSvg,
-    // ViewCodeCircle,
+    ViewCodeButton,
+    ViewCodeSvg,
+    ViewCodeCircle,
     ViewCodeText,
     BackButton,
   },
@@ -315,6 +314,12 @@ export default {
       activeItemCollabImage: "",
       activeItemCollabInsta: "",
       activeItemNumber: 0,
+      githubUrl: "",
+      projectUrl: "",
+      upwork: "",
+      skills: [],
+      details: String,
+      technology: String,
     };
   },
   computed: {
@@ -352,29 +357,35 @@ export default {
         (obj) => obj.name === this.$route.params.name
       );
 
-      this.activeComponent = activeItem.component;
+      this.activeComponent = activeItem.image;
       this.activeItemColor = activeItem.background;
       this.activeItemNumber = activeItem.id;
       this.activeItemCollabImage = activeItem.image;
       this.activeItemCollabInsta = activeItem.collab;
+      this.githubUrl = activeItem.githubUrl;
+      this.projectUrl = activeItem.projectUrl;
+      this.upwork = activeItem.upwork;
+      this.skills = activeItem.skills;
+      this.details = activeItem.details;
+      this.technology = activeItem.technology;
 
-      //   axios
-      //     .get(
-      //       `https://raw.githubusercontent.com/vuezy/mi/master/src/components/interactions/${activeItem.githubUrl}`,
-      //       { crossdomain: true }
-      //     )
-      //     .then((response) => {
-      //       // handle success
-      //       this.activeItemCode = response.data;
-      //       // console.log(response);
-      //     })
-      //     .catch(function (error) {
-      //       // handle error
-      //       console.log(error);
-      //     })
-      //     .then(function () {
-      //       // always executed
-      //     });
+      // axios
+      //   .get(
+      //     `https://raw.githubusercontent.com/KOSIDOCS/MI/master/src/components/interactions/${activeItem.githubUrl}`,
+      //     { crossdomain: true }
+      //   )
+      //   .then((response) => {
+      //     // handle success
+      //     this.activeItemCode = response.data;
+      //     // console.log(response);
+      //   })
+      //   .catch(function (error) {
+      //     // handle error
+      //     console.log(error);
+      //   })
+      //   .then(function () {
+      //     // always executed
+      //   });
 
       //
     },
@@ -386,5 +397,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

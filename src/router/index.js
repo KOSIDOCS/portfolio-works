@@ -1,14 +1,21 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Website from "@/components/Details/Wrapper";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home,
+    name: "Website",
+    component: Website,
+    children: [
+      {
+        path: ":name",
+        name: "WebsiteDetail",
+        props: true,
+      },
+    ],
   },
   {
     path: "/about",

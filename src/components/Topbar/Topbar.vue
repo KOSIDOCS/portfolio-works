@@ -4,7 +4,7 @@
       <GithubLink />
     </MenuButton>
     <AppTitle> Freelance | Contracts | Portfolio Works </AppTitle>
-    <Instagram href="https://www.instagram.com/kosidocs" target="_blank">
+    <Instagram href="https://www.instagram.com/kosidev/" target="_blank">
       <i class="icofont-instagram"></i>
     </Instagram>
   </Wrapper>
